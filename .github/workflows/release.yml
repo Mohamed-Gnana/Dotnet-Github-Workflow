@@ -42,7 +42,7 @@ jobs:
           PAT: ${{ secrets.PAT }}
         run: |
           git tag v${{ steps.get_version.outputs.VERSION }}
-          git push origin v${{ steps.get_version.outputs.VERSION }}
+          git push origin v${{ steps.get_version.outputs.VERSION }} --quiet --set-upstream
 
       - name: Publish NuGet package
         env:

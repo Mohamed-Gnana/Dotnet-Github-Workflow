@@ -29,7 +29,7 @@ jobs:
         working-directory: Sample/
 
       - name: Pack NuGet package
-        run: dotnet pack --no-build --no-restore ./Sample p:NuspecFile=".Nuget/Sample.Nuspec" -v d --configuration Release --output .
+        run: dotnet pack --no-build --no-restore ./Sample --configuration Release --output out
 
 
       - name: Get package version
@@ -40,6 +40,7 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_PAT }}
         run: |
+          cd out
           # Find the NuGet package file(s)
           PACKAGE=$(find . -name "*.nupkg" | head -n 1) # Adjust if necessary to match your package file name pattern
           

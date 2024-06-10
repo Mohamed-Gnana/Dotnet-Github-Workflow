@@ -39,11 +39,14 @@ jobs:
       - name: Create GitHub Tag
         id: create_tag
         env:
-          PAT: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          tag: ${{ steps.get_version.outputs.VERSION }}
         run: |
-          git tag v${{ steps.get_version.outputs.VERSION }}
-          git push origin v${{ steps.get_version.outputs.VERSION }} --quiet --set-upstream
-
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${tag#v}" \
+              --generate-notes
+      
       - name: Publish NuGet package
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_PAT }}

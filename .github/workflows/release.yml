@@ -40,4 +40,5 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_PAT }}
         run: |
+          cd ./Sample
           ls

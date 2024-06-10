@@ -18,15 +18,15 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: /Sample
+        working-directory: Sample/
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
-        working-directory: /Sample
+        working-directory: Sample/
 
       - name: Pack NuGet package
         run: dotnet pack --no-build --configuration Release
-        working-directory: /Sample
+        working-directory: Sample/
 
       - name: Get package version
         id: get_version

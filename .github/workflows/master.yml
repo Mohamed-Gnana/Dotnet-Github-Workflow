@@ -24,23 +24,21 @@ jobs: # define the jobs that will run
         uses: actions/github-script@v6
         with:
           script: |
-            const response = await github.actions.createWorkflowDispatch({
+            github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'main.yml',
               ref: 'main',
             });
-            console.log(response);
 
       - name: Dispatch Workflow
         if: steps.determine-branch.outputs.branch == 'release'
         uses: actions/github-script@v6
         with:
           script: |
-            const response = await github.actions.createWorkflowDispatch({
+            github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'release.yml',
               ref: 'release',
             });
-            console.log(response);

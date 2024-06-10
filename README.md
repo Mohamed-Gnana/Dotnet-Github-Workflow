@@ -10,62 +10,41 @@ This repository contains sample workflows and scripts to demonstrate the use of 
 
 ![GitHub Actions Logo](https://github.githubassets.com/images/modules/site/logos/actions-actions.png)
 
-## Workflow Examples
+# Workflows Overview
 
-### Workflow 1: Continuous Integration for .NET Project
+This repository utilizes GitHub Actions workflows to automate various tasks related to managing a .NET project, including building, testing, and releasing.
 
-#### Purpose:
-- To automate the build and test process for a .NET project on GitHub.
+## Master Workflow (master.yml)
 
-#### Events Triggering the Workflow:
-- `push` events to the `main` branch
-- `pull_request` events targeting the `main` branch
+[![Master Workflow Status](https://github.com/your-username/your-repository-name/workflows/Master%20Workflow%20Dispatcher/badge.svg)](https://github.com/your-username/your-repository-name/actions/workflows/master.yml)
 
-#### Steps:
-1. ![Checkout code](https://example.com/checkout.png)
-   - Uses the `actions/checkout@v2` action to retrieve the repository's code.
-   
-2. ![Setup .NET Core](https://example.com/setup-dotnet.png)
-   - Uses the `actions/setup-dotnet@v2` action to set up the .NET Core SDK.
+The **Master Workflow Dispatcher** is triggered by pushes or pull requests to the `main` or `release` branches. It dispatches the appropriate workflow based on the branch:
+- For the `main` branch, it triggers the `main.yml` workflow, which builds the .NET project.
+- For the `release` branch, it triggers the `release.yml` workflow, which publishes a NuGet package.
 
-3. ![Restore dependencies](https://example.com/restore.png)
-   - Runs `dotnet restore` to restore project dependencies.
+## Main Workflow (main.yml)
 
-4. ![Build](https://example.com/build.png)
-   - Runs `dotnet build --no-restore`
+[![Main Workflow Status](https://github.com/your-username/your-repository-name/workflows/Build%20.NET%20Project/badge.svg)](https://github.com/your-username/your-repository-name/actions/workflows/main.yml)
 
-5. ![Test](https://example.com/test.png)
-   - Runs `dotnet test --no-restore --verbosity normal`
+The **Build .NET Project** workflow is triggered manually or by the Master Workflow Dispatcher. It performs the following tasks:
+- Checks out the repository.
+- Sets up the .NET environment.
+- Restores dependencies.
+- Builds the .NET project in Release configuration.
 
-#### Permissions:
-- Default permissions for read-only access to repository contents.
+## Release Workflow (release.yml)
 
----
+[![Release Workflow Status](https://github.com/your-username/your-repository-name/workflows/Publish%20NuGet%20Package/badge.svg)](https://github.com/your-username/your-repository-name/actions/workflows/release.yml)
 
-### Workflow 2: Continuous Deployment for Dockerized .NET Project
+The **Publish NuGet Package** workflow is triggered manually or by the Master Workflow Dispatcher when changes are pushed to the `release` branch. It automates the process of releasing a new version of the NuGet package:
+- Checks out the repository.
+- Sets up the .NET environment.
+- Restores dependencies.
+- Builds the .NET project in Release configuration.
+- Packs the NuGet package.
+- Creates a GitHub tag and release.
+- Uploads the NuGet package as a release asset.
 
-#### Purpose:
-- To automate the deployment of a Dockerized .NET project to a container registry.
+Each workflow contributes to streamlining the development, testing, and release processes of the .NET project, improving productivity and ensuring consistent quality.
 
-#### Events Triggering the Workflow:
-- Manual trigger
-
-#### Steps:
-1. ![Checkout code](https://example.com/checkout.png)
-   - Uses the `actions/checkout@v2` action to retrieve the repository's code.
-   
-2. ![Login to Container Registry](https://example.com/login.png)
-   - Logs in to the container registry to push Docker images.
-
-3. ![Build Docker Image](https://example.com/build-docker.png)
-   - Builds the Docker image.
-
-4. ![Push Docker Image](https://example.com/push-docker.png)
-   - Pushes the Docker image to the container registry.
-
-5. ![Deploy](https://example.com/deploy.png)
-   - Deploys the Docker image to the target environment.
-
-#### Permissions:
-- Additional permissions for pushing Docker images to the container registry.
 

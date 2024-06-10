@@ -1,0 +1,46 @@
+name: Master Workflow Dispatcher # workflow name -> appears on Action tab
+
+on: # Define which events trigger this workflow
+  push: # push event trigger -> Multiple events with no configurations [push, pull_request]
+    branches: # event Filter [main, release]
+      - main
+      - release
+  pull_request:
+    branches:
+      - main
+      - release
+
+jobs: # define the jobs that will run
+  dispatch: # job name
+    runs-on: ubuntu-latest # the os that will be used
+
+    steps: # job steps
+      - name: Determine Branch
+        id: determine-branch
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+
+      - name: Dispatch Workflow
+        if: steps.determine-branch.outputs.branch == 'main'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const response = await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'main.yml',
+              ref: 'main',
+            });
+            console.log(response);
+
+      - name: Dispatch Workflow
+        if: steps.determine-branch.outputs.branch == 'release'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const response = await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'release.yml',
+              ref: 'release',
+            });
+            console.log(response);

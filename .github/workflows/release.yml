@@ -40,26 +40,4 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_PAT }}
         run: |
-          cd out
-          # Find the NuGet package file(s)
-          PACKAGE=$(find . -name "*.nupkg" | head -n 1) # Adjust if necessary to match your package file name pattern
-          
-          # Check if a package file was found
-          if [ -z "$PACKAGE" ]; then
-            echo "No NuGet package files found."
-            exit 1
-          fi
-          
-          # Push the NuGet package
-          dotnet nuget push "$PACKAGE" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
-      
-      - name: Create GitHub Tag
-        id: create_tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          tag: ${{ steps.get_version.outputs.VERSION }}
-        run: |
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
+          ls

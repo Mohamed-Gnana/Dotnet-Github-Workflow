@@ -29,24 +29,12 @@ jobs:
         working-directory: Sample/
 
       - name: Pack NuGet package
-        run: dotnet pack --no-build --configuration Release
-        working-directory: Sample/
+        run: dotnet pack --no-build ./Sample --configuration Release --output .
 
       - name: Get package version
         id: get_version
         run: echo "##[set-output name=VERSION;]$(cat **/*.csproj | grep '<Version>' | sed -E 's/.*<Version>(.+)<\/Version>.*/\1/')"
 
-      - name: Create GitHub Tag
-        id: create_tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          tag: ${{ steps.get_version.outputs.VERSION }}
-        run: |
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
-      
       - name: Publish NuGet package
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_PAT }}
@@ -62,3 +50,14 @@ jobs:
           
           # Push the NuGet package
           dotnet nuget push "$PACKAGE" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+      
+      - name: Create GitHub Tag
+        id: create_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          tag: ${{ steps.get_version.outputs.VERSION }}
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${tag#v}" \
+              --generate-notes

@@ -29,7 +29,8 @@ jobs:
         working-directory: Sample/
 
       - name: Pack NuGet package
-        run: dotnet pack --no-build ./Sample --configuration Release --output .
+        run: dotnet pack --no-build --no-restore ./Sample p:NuspecFile=".Nuget/Sample.Nuspec" --configuration Release --output .
+
 
       - name: Get package version
         id: get_version

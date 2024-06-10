@@ -23,6 +23,7 @@ jobs: # define the jobs that will run
         if: steps.determine-branch.outputs.branch == 'main'
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.PAT }}
           script: |
             github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
@@ -35,6 +36,7 @@ jobs: # define the jobs that will run
         if: steps.determine-branch.outputs.branch == 'release'
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.PAT }}
           script: |
             github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
